@@ -79,7 +79,7 @@
         import { MMDAnimationHelper } from './jsm/jsm/animation/MMDAnimationHelper.js';
 
         let camera, scene, renderer, effect;
-        let mesh, helper;
+        let mesh;
         let SCREEN_WIDTH = window.innerWidth;
         let SCREEN_HEIGHT = window.innerHeight;
         let aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
@@ -93,10 +93,15 @@
             eye_raised_lower_eyelid_right: 0, eye_surprised_left: 0, eye_surprised_right: 0, iris_small_left: 0, iris_small_right: 0, mouth_aaa: 0, mouth_iii: 0, mouth_uuu: 0, mouth_eee: 0, mouth_ooo: 0
             , mouth_delta: 0, mouth_smirk: 0, mouth_raised_corner_left: 0, mouth_raised_corner_right: 0, mouth_lowered_corner_left: 0, mouth_lowered_corner_right: 0, iris_rotation_x: 0, iris_rotation_y: 0, head_x: 0, head_y: 0, head_z: 0
         };
+        let loadstatus;
+        let data_json, data_json_length;
+        let modelfile_num = 0;
+
         Ammo().then(function (AmmoLib) {
 
             Ammo = AmmoLib;
-            init();
+            //init();
+            getjson();
             animate();
 
         });
@@ -142,8 +147,7 @@
 
             }
 
-            const modelFile = 'models/mmd/kizunaai/kizunaai.pmx';
-            helper = new MMDAnimationHelper();
+            const modelFile = data_json.modellist[modelfile_num].location;
 
             const loader = new MMDLoader();
 
@@ -156,6 +160,7 @@
 
                 findeye_index();
                 initGui();
+                loadstatus = 1;
             }, onProgress, null);
 
             //
@@ -168,7 +173,6 @@
         }
 
         function onWindowResize() {
-
             SCREEN_WIDTH = window.innerWidth;
             SCREEN_HEIGHT = window.innerHeight;
             aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
@@ -180,10 +184,9 @@
             camera.top = frustumSize / 2;
             camera.bottom = - frustumSize / 2;
             camera.updateProjectionMatrix();
-
         }
-        function initGui() {
 
+        function initGui() {
             gui = new GUI();
 
             const controls = {};
@@ -192,25 +195,17 @@
             const morphs = gui.addFolder('Morphs');
 
             function initControls() {
-
                 for (const key in standardlist) {
 
                     controls[key] = 0.0;
 
                 }
-
-
-
             }
 
             function initKeys() {
-
                 for (const key in standardlist) {
-
                     keys.push(key);
-
                 }
-
             }
 
             function initMorphs() {
@@ -266,7 +261,72 @@
         }
 
         function render() {
-            effect.render(scene, camera);
+            if(loadstatus == 1) {
+                effect.render(scene, camera);
+            }      
+        }
+        
+        //GetModelData(); 
+        function getjson(){
+			var xmlhttp = new XMLHttpRequest();
+            var url = 'model_data.json';
+
+            xmlhttp.onreadystatechange = function() {
+                if(this.readyState == 4 && this.status == 200) {
+                    data_json = JSON.parse(this.responseText);
+                    data_json_length = Object.keys(data_json.modellist).length -1;
+                    console.log(data_json);
+                    init();
+                    //changestdmorth();
+                }
+            };
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+		}
+
+
+        //--------------------------------------------------------------------------------------------
+        //Events
+        addEventListener('keydown', keyboard);
+
+        function keyboard(e) {
+            if(e.key == 'a') {
+				modelfile_num --;
+				if(modelfile_num < 0) { modelfile_num = data_json_length - 1; }
+				changeModel();
+			}else if(e.key == 'd') {
+				modelfile_num ++;
+				if(modelfile_num == data_json_length) { modelfile_num = 0; }
+				changeModel();
+			}
+        }
+
+        function changeModel() {
+            scene.remove(mesh);
+            gui.destroy();
+
+            // model
+            function onProgress(xhr) {
+                if (xhr.lengthComputable) {
+                    const percentComplete = xhr.loaded / xhr.total * 100;
+                    console.log(Math.round(percentComplete, 2) + '% downloaded');
+                }
+            }
+            const modelFile = data_json.modellist[modelfile_num].location;
+
+            const loader = new MMDLoader();
+
+            loader.load(modelFile, function (object) {
+
+            mesh = object;
+            mesh.position.y = - 10;
+
+            scene.add(mesh);
+
+            findeye_index();
+            initGui();
+            loadstatus = 1;
+            }, onProgress, null);
         }
 
     </script>
