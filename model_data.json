@@ -38,7 +38,15 @@
       "mouth_raised_corner_left": 185,
       "mouth_raised_corner_right": 187,
       "mouth_lowered_corner_left": 186,
-      "mouth_lowered_corner_right": 188
+      "mouth_lowered_corner_right": 188,
+      "RXNA": -14.8,
+      "LXNA": -14.8,
+      "RXPA": 16.7,
+      "LXPA": 16.7,
+      "RYNA": -10.2,
+      "LYNA": -21.2,
+      "RYPA": 21.2,
+      "LYPA": 10.2
     },
     {
       "location": "models/mmd/kizunaai/kizunaai.pmx",
@@ -78,7 +86,15 @@
       "mouth_raised_corner_left": -1,
       "mouth_raised_corner_right": -1,
       "mouth_lowered_corner_left": 19,
-      "mouth_lowered_corner_right": 19
+      "mouth_lowered_corner_right": 19,
+      "RXNA": -8.4,
+      "LXNA": -8.4,
+      "RXPA": 11.4,
+      "LXPA": 11.4,
+      "RYNA": -8,
+      "LYNA": -12.6,
+      "RYPA": 12.6,
+      "LYPA": 8
     },
     {
       "location": "models/mmd/『天宮こころ(Kokoro Amamiya)』/『天宮こころ(Kokoro Amamiya)』.pmx",
@@ -118,7 +134,15 @@
       "mouth_raised_corner_left": -1,
       "mouth_raised_corner_right": -1,
       "mouth_lowered_corner_left": -1,
-      "mouth_lowered_corner_right": -1
+      "mouth_lowered_corner_right": -1,
+      "RXNA": -8.4,
+      "LXNA": -8.4,
+      "RXPA": 11.4,
+      "LXPA": 11.4,
+      "RYNA": -8,
+      "LYNA": -12.6,
+      "RYPA": 12.6,
+      "LYPA": 8
     }
   ]
 }
